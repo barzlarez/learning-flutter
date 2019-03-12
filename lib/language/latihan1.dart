@@ -17,14 +17,14 @@ class User extends Object {
     final String norek;
     double saldo;
 
-    User(this.nama, this.pin, this.saldo, this.norek);
+    User(this.nama, this.pin, this.norek, this.saldo);
 }
 
 var users = [
-    User("Ikhsan", "1234", 20000, "123-6"),
-    User("Nana", "4367", 10000, "201-9"),
-    User("Ramli", "2209", 30000, "222-5"),
-    User("Diah", "3010", 50000, "333-5")
+    User("Ikhsan", "1234", "123-6", 20000),
+    User("Nana", "4367", "201-9", 10000),
+    User("Ramli", "2209", "222-5", 30000),
+    User("Diah", "3010", "333-5", 50000)
 ];
 
 
