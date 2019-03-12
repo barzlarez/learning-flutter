@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:test_flutter_app/layout/login_layout.dart';
-import 'package:test_flutter_app/layout/registration_layout.dart';
-import 'package:test_flutter_app/layout/listview_layout.dart';
+import 'package:test_flutter_app/layout/latihan2.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,15 +21,15 @@ class MyApp extends StatelessWidget {
                 // is not restarted.
                 primarySwatch: Colors.blue,
             ),
-//            home: MyAppLogin(),
-            initialRoute: '/',
-            routes: {
-                '/': (context) => MyAppLogin(),
-                '/register': (context) => MyAppRegistration(),
-                '/list': (context) => MyAppListView(),
-            },
-            onGenerateRoute: (routeSetting) {
-            },
+            home: MyAppLatihan2(),
+//            initialRoute: '/',
+//            routes: {
+//                '/': (context) => MyAppLogin(),
+//                '/register': (context) => MyAppRegistration(),
+//                '/list': (context) => MyAppListView(),
+//            },
+//            onGenerateRoute: (routeSetting) {
+//            },
         );
     }
 }
