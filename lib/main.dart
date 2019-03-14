@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:test_flutter_app/api/favorite_model.dart';
 import 'package:test_flutter_app/api/list_meal.dart';
 
-void main() => runApp(MyApp());
+import 'layout/listview_layout.dart';
+import 'layout/login_layout.dart';
+import 'layout/registration_layout.dart';
+
+void main() {
+    final favorite = FavoriteModel();
+    runApp(
+        ScopedModel(
+            model: favorite,
+            child: MyApp()
+        )
+    );
+}
 
 class MyApp extends StatelessWidget {
     // This widget is the root of your application.
@@ -22,15 +36,27 @@ class MyApp extends StatelessWidget {
                 primarySwatch: Colors.blue,
                 brightness: Brightness.light
             ),
-            home: ListMeals(),
-//            initialRoute: '/',
-//            routes: {
-//                '/': (context) => MyAppLogin(),
-//                '/register': (context) => MyAppRegistration(),
-//                '/list': (context) => MyAppListView(),
-//            },
-//            onGenerateRoute: (routeSetting) {
-//            },
+            home: ListMeals()
+        );
+    }
+}
+
+class MyAppWithRoute extends StatelessWidget {
+    // This widget is the root of your application.
+    @override
+    Widget build(BuildContext context) {
+        return MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+                primarySwatch: Colors.blue,
+                brightness: Brightness.light
+            ),
+            initialRoute: '/',
+            routes: {
+                '/': (context) => MyAppLogin(),
+                '/register': (context) => MyAppRegistration(),
+                '/list': (context) => MyAppListView(),
+            }
         );
     }
 }

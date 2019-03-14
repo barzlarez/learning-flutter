@@ -4,8 +4,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:scoped_model/scoped_model.dart';
 
 import 'detail_meal.dart';
+import 'favorite_meal.dart';
+import 'favorite_model.dart';
 import 'models.dart';
 
 class ListMeals extends StatefulWidget {
@@ -34,6 +37,17 @@ class _ListMeals extends State<ListMeals> {
         return Scaffold(
             appBar: AppBar(
                 title: Text("Meals"),
+                actions: <Widget>[
+                    IconButton(
+                        icon: Icon(Icons.favorite),
+                        onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => FavoriteMeal())
+                            );
+                        }
+                    )
+                ],
             ),
             body: Container(
                 child: Center(
@@ -45,6 +59,7 @@ class _ListMeals extends State<ListMeals> {
 
     // Get battery level.
     String _batteryLevel = 'Unknown battery level.';
+
     Future<void> _getBatteryLevel() async {
         String batteryLevel;
         try {
@@ -75,7 +90,9 @@ class _ListMeals extends State<ListMeals> {
 //                                    _getBatteryLevel();
                                     Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => DetailMeal(meal: item))
+                                        MaterialPageRoute(
+                                            builder: (context) => DetailMeal(item, item.ingredients)
+                                        )
                                     );
                                 },
                             );
@@ -94,23 +111,54 @@ class _ListMeals extends State<ListMeals> {
             constraints: BoxConstraints(),
             child: Column(
                 children: <Widget>[
-                    Image.network(value.thumbnail, height: 200, fit: BoxFit.fitWidth),
+                    AspectRatio(
+                        aspectRatio: 5 / 2,
+                        child: Image.network(value.thumbnail, height: 200, fit: BoxFit.fitWidth)
+                    ),
                     Container(
-                        padding: EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 16),
-                        child: Column(
+                        padding: EdgeInsets.only(top: 8, left: 16, right: 8, bottom: 16),
+                        child: Row(
                             children: <Widget>[
-                                Text(value.mealName,
-                                    style: TextStyle(
-                                        color: Colors.indigo,
-                                        fontWeight: FontWeight.bold)
+                                Expanded(
+                                    child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: <Widget>[
+                                            Text(value.mealName,
+                                                style: TextStyle(
+                                                    color: Colors.indigo,
+                                                    fontWeight: FontWeight.bold)
+                                            ),
+                                            Text(value.category,
+                                                style: TextStyle(
+                                                    color: Colors.grey[700],
+                                                    fontWeight: FontWeight.normal)
+                                            )
+                                        ],
+                                    ),
                                 ),
-                                Text(value.category,
-                                    style: TextStyle(
-                                        color: Colors.grey[700],
-                                        fontWeight: FontWeight.normal)
+                                ScopedModelDescendant<FavoriteModel>(
+                                    builder: (context, child, favorite) {
+                                        final model = ScopedModel.of<FavoriteModel>(context, rebuildOnChange: true);
+                                        if (favorite.isAdded(value)) {
+                                            return IconButton(
+                                                icon: Icon(Icons.delete),
+                                                onPressed: () {
+                                                    model.remove(value);
+                                                },
+                                            );
+                                        } else {
+                                            return IconButton(
+                                                icon: Icon(Icons.add),
+                                                onPressed: () {
+                                                    model.addItem(value);
+                                                },
+                                            );
+                                        }
+                                    },
                                 )
                             ],
-                        ),
+                        )
                     )
                 ],
             ),
